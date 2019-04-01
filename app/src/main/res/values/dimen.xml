@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!--font sizes-->
+    <dimen name="font_size_heading">16sp</dimen>
+    <dimen name="font_size_title">20sp</dimen>
+
+    <!--margins & padding-->
+    <dimen name="margin_padding_size_tiny">4dp</dimen>
+    <dimen name="margin_padding_size_medium">12dp</dimen>
+
+    <!--custom views dimen-->
+    <dimen name="progress_bar_size">30dp</dimen>
+</resources>
