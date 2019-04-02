@@ -18,6 +18,8 @@ import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlaceAutocomplete;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.libraries.places.api.Places;
+import com.google.android.libraries.places.api.net.PlacesClient;
 import com.lovely.walknavigationapp.R;
 import com.lovely.walknavigationapp.constant.Appconstant;
 import com.lovely.walknavigationapp.data.model.directionResult.Location;
@@ -60,6 +62,18 @@ public class GetLocationActivity
 
         // instantiate presenter instance
         presenter = new GetLocationActivityPresenterImpl(this);
+
+        initialisePlacesSDK();
+
+    }
+
+    private void initialisePlacesSDK() {
+
+        // Initialize Places.
+        Places.initialize(getApplicationContext(), getString(R.string.google_maps_api_key));
+
+        // Create a new Places client instance.
+        PlacesClient placesClient = Places.createClient(this);
     }
 
     @Override
@@ -261,7 +275,6 @@ public class GetLocationActivity
             origin.setFormattedAddress(address);
 
             tvOrigin.setText(address);
-
 
         } else if (clickedItem == Appconstant.DESTINATION_CLICKED) {
 

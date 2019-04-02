@@ -92,11 +92,6 @@ public class MapsNavigationActivity
             }
         }
 
-
-        // dummy for now
-        origin = new LatLng(-20.291825, 57.448668);
-        destination = new LatLng(-20.179724, 57.613463);
-
     }
 
 
