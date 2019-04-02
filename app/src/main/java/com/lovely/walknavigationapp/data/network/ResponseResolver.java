@@ -47,7 +47,6 @@ public abstract class ResponseResolver<T> implements Callback<T> {
         } else {
             onError(ErrorUtils.parseError(tResponse));
         }
-
     }
 
     @Override

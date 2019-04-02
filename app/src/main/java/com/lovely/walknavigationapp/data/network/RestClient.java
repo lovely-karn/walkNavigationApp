@@ -28,9 +28,11 @@ public final class RestClient {
      * @return object of Retrofit
      */
     static Retrofit getRetrofitBuilder() {
+
+
         if (retrofit == null) {
             retrofit = new Retrofit.Builder()
-                    .baseUrl(BuildConfig.BASE_URL)
+                    .baseUrl(BuildConfig.GOOGLE_URL)
                     .addConverterFactory(GsonConverterFactory.create())
                     .client(httpClient().build())
                     .build();

@@ -16,6 +16,9 @@
     <!--black scale-->
     <color name="black_50">#80000000</color>
 
+    <!--purple-->
+    <color name="purple">#800080</color>
+
     <!--text color-->
     <color name="text_color">@color/black_50</color>
 

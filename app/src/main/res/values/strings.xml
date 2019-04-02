@@ -2,5 +2,6 @@
     <string name="app_name">WalkNavigationApp</string>
     <string name="App_Text">WalK Navigation App</string>
     <string name="text_loading">Loading…</string>
+    <string name="btn_walk_navigation">Walk Navigation</string>
 
 </resources>
