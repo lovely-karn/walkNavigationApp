@@ -161,7 +161,6 @@ public class MapsNavigationActivity
         getIntentData();
 
         googleMap.addMarker(new MarkerOptions()
-                .title("origin")
                 .position(origin));
 
 
@@ -172,12 +171,11 @@ public class MapsNavigationActivity
 
         if (googleMap != null) {
             googleMap.addMarker(new MarkerOptions().position(new LatLng(results.routes[0].legs[0]
-                    .startLocation.lat, results.routes[0].legs[0].startLocation.lng))
-                    .title(results.routes[0].legs[0].startAddress));
+                    .startLocation.lat, results.routes[0].legs[0].startLocation.lng)));
 
             googleMap.addMarker(new MarkerOptions().position(new LatLng(results.routes[0]
                     .legs[0].endLocation.lat, results.routes[0].legs[0]
-                    .endLocation.lng)).title(results.routes[0].legs[0].startAddress));
+                    .endLocation.lng)));
         }
     }
 
