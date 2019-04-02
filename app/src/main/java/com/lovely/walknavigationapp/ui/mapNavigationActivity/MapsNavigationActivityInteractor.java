@@ -7,6 +7,8 @@ import com.lovely.walknavigationapp.data.model.directionResult.DirectionResults;
 import com.lovely.walknavigationapp.data.network.ApiError;
 import com.lovely.walknavigationapp.data.network.ApiInterface;
 
+import java.util.List;
+
 /**
  * The interface Maps navigation activity interactor.
  */

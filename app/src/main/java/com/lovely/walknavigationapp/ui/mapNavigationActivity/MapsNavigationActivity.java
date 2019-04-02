@@ -1,8 +1,15 @@
 package com.lovely.walknavigationapp.ui.mapNavigationActivity;
 
+import android.app.Activity;
+import android.app.Dialog;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
+import android.databinding.DataBindingUtil;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -18,6 +25,9 @@ import com.google.maps.model.GeocodedWaypoint;
 import com.lovely.walknavigationapp.R;
 import com.lovely.walknavigationapp.constant.Appconstant;
 import com.lovely.walknavigationapp.data.network.RestClient;
+import com.lovely.walknavigationapp.databinding.DialogWaypointsBinding;
+import com.lovely.walknavigationapp.ui.getLocationActivity.model.GetLocationModel;
+import com.lovely.walknavigationapp.ui.mapNavigationActivity.viewmodel.NavigationViewModel;
 
 import java.util.List;
 
@@ -36,12 +46,19 @@ public class MapsNavigationActivity
     private List<LatLng> wayPoints;
     private SupportMapFragment mapFragment;
     private GoogleMap googleMap;
+    private GetLocationModel getLocationModel;
 
+    private NavigationViewModel navigationViewModel;
+    private Dialog dialog;
+    private String mWayPointsString;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps_navigation);
+
+        //viewmodel
+        navigationViewModel = ViewModelProviders.of(this).get(NavigationViewModel.class);
 
         // getIntentData
         getIntentData();
@@ -61,22 +78,25 @@ public class MapsNavigationActivity
 
         Intent intent = getIntent();
 
+
+        if (intent.hasExtra(Appconstant.INTENT_GEOLOCATION_DATA)) {
+            getLocationModel = intent.getParcelableExtra(Appconstant.INTENT_GEOLOCATION_DATA);
+        }
+
+        if (getLocationModel != null) {
+            origin = getLocationModel.getOrigin();
+            destination = getLocationModel.getDestination();
+
+            if (wayPoints != null) {
+                wayPoints = getLocationModel.getWaypoints();
+            }
+        }
+
+
         // dummy for now
         origin = new LatLng(-20.291825, 57.448668);
         destination = new LatLng(-20.179724, 57.613463);
 
-
-        if (intent.hasExtra(Appconstant.INTENT_ORIGIN)) {
-
-        }
-
-        if (intent.hasExtra(Appconstant.INTENT_DESTINATION)) {
-
-        }
-
-        if (intent.hasExtra(Appconstant.INTENT_WAYPOINTS)) {
-
-        }
     }
 
 
@@ -116,25 +136,6 @@ public class MapsNavigationActivity
 
     }
 
-    /**
-     * setMarker
-     *
-     * @param map      - on which marker has to be shown
-     * @param location - the location where marker has to be shown
-     * @param title    - title of the address
-     * @param address  - address
-     */
-    private void setMarker(final GoogleMap map, final LatLng location, final String title, final String address) {
-        if (origin != null) {
-            LatLng latlng = new LatLng(location.latitude, location.longitude);
-            map.clear();
-            map.moveCamera(CameraUpdateFactory.newLatLngZoom(latlng, ZOOM_LEVEL));
-            map.addMarker(new MarkerOptions()
-                    .title(title)
-                    .snippet(address)
-                    .position(latlng));
-        }
-    }
 
     @Override
     public void showProgressBar() {
@@ -154,7 +155,6 @@ public class MapsNavigationActivity
 
         // an show alert dialog / snack bar either
         Toast.makeText(this, errorMsg, Toast.LENGTH_LONG).show();
-
     }
 
     @Override
@@ -177,7 +177,7 @@ public class MapsNavigationActivity
         presenter.askInteractorToGetDirections(origin, destination, wayPoints);
     }
 
-    public void addMarkersToMap(final DirectionsResult results) {
+    public void addMarker(final DirectionsResult results) {
 
         if (googleMap != null) {
             googleMap.addMarker(new MarkerOptions().position(new LatLng(results.routes[0].legs[0]
@@ -191,10 +191,17 @@ public class MapsNavigationActivity
     }
 
     @Override
-    public void addMarkersToMap(final GeocodedWaypoint[] geocodedWaypointsList) {
+    public void saveWayPointsInViewModel(final GeocodedWaypoint[] geocodedWaypointsList) {
 
-       // uisng viewmodel values will be udated in viewModel & then value will be fetched via data-binding in the pop up ..
+        // uisng viewmodel values will be udated in viewModel & then value will be fetched via data-binding in the pop up ..
+        String wayPointsString = "";
+        for (GeocodedWaypoint item : geocodedWaypointsList) {
+            wayPointsString = wayPointsString + item.placeId + "\n";
+        }
 
+        mWayPointsString = wayPointsString;
+
+        navigationViewModel.saveWayPoints(wayPointsString);
     }
 
     /**
@@ -206,11 +213,33 @@ public class MapsNavigationActivity
             @Override
             public void onPolylineClick(Polyline polyline) {
                 //via data binding show all waypoints marker ...
-
-//                Toast.makeText(MapsNavigationActivity.this, "poly line clicked", Toast.LENGTH_LONG).show();
-
+                showPopUP();
             }
         });
+    }
 
+    private void showPopUP() {
+
+        // remove the instance of old dialog
+        if (dialog != null) {
+            dialog.dismiss();
+        }
+
+        dialog = new Dialog(this);
+
+        // Inflate view and obtain an instance of the binding class.
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+
+        DialogWaypointsBinding binding = DataBindingUtil.inflate(
+                LayoutInflater.from(MapsNavigationActivity.this), R.layout.dialog_waypoints, null, false);
+        dialog.setContentView(binding.getRoot());
+        dialog.setCancelable(true);
+        dialog.setCanceledOnTouchOutside(true);
+        dialog.show();
+        Window window = dialog.getWindow();
+        window.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+
+        // Assign the component to a property in the binding class.
+        binding.setWayPointsString(mWayPointsString);
     }
 }

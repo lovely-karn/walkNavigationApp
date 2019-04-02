@@ -8,25 +8,35 @@ public class Location {
 
     @SerializedName("lat")
     @Expose
-    private float lat;
+    private double lat;
     @SerializedName("lng")
     @Expose
-    private float lng;
+    private double lng;
 
-    public float getLat() {
+    private String formattedAddress;
+
+    public double getLat() {
         return lat;
     }
 
-    public void setLat(float lat) {
+    public void setLat(double lat) {
         this.lat = lat;
     }
 
-    public float getLng() {
+    public double getLng() {
         return lng;
     }
 
-    public void setLng(float lng) {
+    public void setLng(double lng) {
         this.lng = lng;
+    }
+
+    public String getFormattedAddress() {
+        return formattedAddress;
+    }
+
+    public void setFormattedAddress(String formattedAddress) {
+        this.formattedAddress = formattedAddress;
     }
 
 }

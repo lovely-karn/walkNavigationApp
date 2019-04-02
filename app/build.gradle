@@ -29,7 +29,7 @@ android {
     }
 
     defaultConfig {
-        resValue "string", "google_maps_api_key", "AIzaSyAOPGpCpzOIuHawlVrSr2nX0j8kDMAyIE8"
+        resValue "string", "google_maps_api_key", "AIzaSyBJfPiMAwQNpk5oOXXsYGpAe9Ng3Oo6Ha0"
         buildConfigField 'String', 'GOOGLE_URL', '"https://maps.googleapis.com/maps/api/"'
         buildConfigField 'String', 'BASE_URL', '"YOUR_BASE_URL"'
     }
@@ -37,6 +37,10 @@ android {
     compileOptions {
         sourceCompatibility = '1.8'
         targetCompatibility = '1.8'
+    }
+
+    dataBinding {
+        enabled = true
     }
 }
 
@@ -67,9 +71,13 @@ dependencies {
     // recycler view
     implementation "com.android.support:recyclerview-v7:$supportLibraryVersion"
 
-    /**
-     * google play services dependency
-     */
+    //google play services dependency
     implementation 'com.google.android.gms:play-services-base:16.1.0'
+
+//    implementation 'com.google.android.libraries.places:1.1.0'
+
+    // Lifecycle components
+    implementation "android.arch.lifecycle:extensions:1.1.0"
+    annotationProcessor "android.arch.lifecycle:compiler:1.1.0"
 
 }

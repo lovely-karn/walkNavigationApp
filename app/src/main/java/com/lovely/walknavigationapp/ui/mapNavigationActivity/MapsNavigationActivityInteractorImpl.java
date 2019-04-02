@@ -2,21 +2,16 @@ package com.lovely.walknavigationapp.ui.mapNavigationActivity;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.google.maps.DirectionsApi;
+import com.google.maps.DirectionsApiRequest;
 import com.google.maps.GeoApiContext;
 import com.google.maps.errors.ApiException;
 import com.google.maps.model.DirectionsResult;
 import com.google.maps.model.TravelMode;
-import com.lovely.walknavigationapp.BuildConfig;
-import com.lovely.walknavigationapp.R;
-import com.lovely.walknavigationapp.constant.ApiKeyconstant;
-import com.lovely.walknavigationapp.data.model.CommonResponse;
-import com.lovely.walknavigationapp.data.model.directionResult.DirectionResults;
-import com.lovely.walknavigationapp.data.network.ApiError;
 import com.lovely.walknavigationapp.data.network.ApiInterface;
-import com.lovely.walknavigationapp.data.network.CommonParams;
-import com.lovely.walknavigationapp.data.network.ResponseResolver;
+
 
 import java.io.IOException;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 public class MapsNavigationActivityInteractorImpl implements MapsNavigationActivityInteractor {
@@ -35,23 +30,27 @@ public class MapsNavigationActivityInteractorImpl implements MapsNavigationActiv
                                            final LatLng destination,
                                            final GetDirectionResultListener listener) {
 
-        CommonParams.Builder builder = new CommonParams.Builder();
         DirectionsResult directionsResult;
 
         String originStr = origin.latitude + "," + origin.longitude;
         String destStr = destination.latitude + "," + destination.longitude;
 
-        builder.add(ApiKeyconstant.KEY_ORIGIN, originStr);
-        builder.add(ApiKeyconstant.KEY_DESTINATION, destStr);
-        builder.add(ApiKeyconstant.KEY_TRAVEL_MODE, TravelMode.WALKING);
-        builder.add(ApiKeyconstant.MAPS_API_KEY, mapsKey);
-
 
         try {
-            directionsResult = DirectionsApi.newRequest(getGeoContext())
+
+            DirectionsApiRequest directionsApiRequest = DirectionsApi.newRequest(getGeoContext())
                     .mode(TravelMode.WALKING).origin(originStr)
-                    .destination(destStr)
-                    .await();
+                    .destination(destStr);
+
+//            // adding way points
+//            if (wayPoints != null && wayPoints.size() > 0) {
+//
+//                directionsApiRequest.waypoints(wayPoints.toArray(new com.google.maps.model.LatLng[wayPoints.size()]));
+//
+//            }
+
+
+            directionsResult = directionsApiRequest.await();
 
             //pass the result to the listener
             listener.getDirectionResultSuccess(directionsResult);
@@ -68,6 +67,7 @@ public class MapsNavigationActivityInteractorImpl implements MapsNavigationActiv
             e.printStackTrace();
         }
     }
+
 
     private GeoApiContext getGeoContext() {
         GeoApiContext geoApiContext = new GeoApiContext();

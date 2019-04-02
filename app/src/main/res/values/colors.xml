@@ -19,11 +19,24 @@
     <!--purple-->
     <color name="purple">#800080</color>
 
+
+    <!--red scale-->
+    <color name="red">#e1134f</color>
+
+    <!--orange scale-->
+    <color name="orange_50">#80ef7c50</color>
+
     <!--text color-->
     <color name="text_color">@color/black_50</color>
 
     <!--button color-->
     <color name="button_color">@color/colorAccent</color>
     <color name="light_button_color">@color/colorAccent_light</color>
+    <color name="very_light_button_color">@color/orange_50</color>
+
+    <!--edit_stext box color-->
+    <color name="edit_text_line_color">@color/medium_gray</color>
+    <color name="edit_text_focus_line_color">@color/colorAccent</color>
+    <color name="edit_text_error_line_color">@color/red</color>
 
 </resources>

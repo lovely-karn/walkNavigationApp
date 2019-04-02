@@ -1,23 +1,15 @@
 package com.lovely.walknavigationapp.ui.mapNavigationActivity;
 
 import android.graphics.Color;
-import android.util.Log;
 
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.maps.model.DirectionsResult;
 import com.google.maps.model.Distance;
 import com.google.maps.model.GeocodedWaypoint;
 import com.lovely.walknavigationapp.R;
-import com.lovely.walknavigationapp.data.model.CommonResponse;
-import com.lovely.walknavigationapp.data.model.directionResult.DirectionResults;
-import com.lovely.walknavigationapp.data.model.directionResult.Location;
-import com.lovely.walknavigationapp.data.model.directionResult.Route;
-import com.lovely.walknavigationapp.data.model.directionResult.Step;
 import com.lovely.walknavigationapp.data.network.ApiError;
 import com.lovely.walknavigationapp.util.RouteDecode;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static com.lovely.walknavigationapp.constant.Appconstant.FOUR_THOUSAND;
@@ -40,8 +32,10 @@ public class MapsNavigationActivityPresenterImpl
     @Override
     public void askInteractorToGetDirections(LatLng origin, LatLng destination, List<LatLng> wayPoints) {
 
+
         if (origin != null && destination != null) {
 
+            // here wayPoints can be picked from common data..
             interactor.apiHitTOGetDirectionResult(origin, destination, this);
         }
     }
@@ -58,11 +52,11 @@ public class MapsNavigationActivityPresenterImpl
 
         int polylineColor = getPolyLineColor(directionResultsResponse.routes[0].legs[0].distance);
 
-        view.addMarkersToMap(directionResultsResponse);
+        view.addMarker(directionResultsResponse);
 
         GeocodedWaypoint geocodedWaypointsList[] = directionResultsResponse.geocodedWaypoints;
 
-        view.addMarkersToMap(geocodedWaypointsList);
+        view.saveWayPointsInViewModel(geocodedWaypointsList);
 
         view.showNavigationLines(decodedPath, polylineColor);
     }

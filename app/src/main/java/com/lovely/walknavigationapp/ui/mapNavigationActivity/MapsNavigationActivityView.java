@@ -41,11 +41,11 @@ public interface MapsNavigationActivityView {
     void showErrorMessage(String errorMsg);
 
 
-    void addMarkersToMap(DirectionsResult results);
+    void addMarker(DirectionsResult results);
 
     /**
      * @param geocodedWaypointsList waypoint list
      */
-    void addMarkersToMap(GeocodedWaypoint geocodedWaypointsList[]);
+    void saveWayPointsInViewModel(GeocodedWaypoint geocodedWaypointsList[]);
 
 }
