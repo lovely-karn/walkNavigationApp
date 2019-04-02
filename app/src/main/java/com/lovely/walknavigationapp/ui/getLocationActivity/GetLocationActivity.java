@@ -117,10 +117,10 @@ public class GetLocationActivity
             case R.id.btnWalkNavigation:
 
                 // TODO :- has to test this part
-//                GetLocationModel getLocationModel = createGeoLocationModel();
+                GetLocationModel getLocationModel = createGeoLocationModel();
 
                 Intent intent = new Intent(GetLocationActivity.this, MapsNavigationActivity.class);
-//                intent.putExtra(Appconstant.INTENT_GEOLOCATION_DATA, getLocationModel);
+                intent.putExtra(Appconstant.INTENT_GEOLOCATION_DATA, getLocationModel);
                 startActivity(intent);
                 break;
 
@@ -135,9 +135,8 @@ public class GetLocationActivity
                 break;
 
             case R.id.tvWayPoints:
-                if (waypoints != null && waypoints.size() < 4) {
+                if (waypoints != null && waypoints.size() < 2) {
                     clickedItem = Appconstant.WAYPOINTS_CLICKED;
-                    waypoints = new ArrayList<>();
                     presenter.askPresenterToOpenPlaceAutoComplete();
                 } else {
                     Toast.makeText(this, getString(R.string.prompt_additional_addresses_limit), Toast.LENGTH_LONG).show();
@@ -289,7 +288,12 @@ public class GetLocationActivity
 
             waypoints.add(location);
 
+            Log.e("wayPoints", "" + waypoints.size());
+
             additionalAddressesAdapter.addTheAddresses(waypoints);
+
+            tvAdditionalAddresses.setVisibility(View.VISIBLE);
+            recyclerView.setVisibility(View.VISIBLE);
 
         }
 

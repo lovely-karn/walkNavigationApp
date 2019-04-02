@@ -2,6 +2,7 @@ package com.lovely.walknavigationapp.ui.getLocationActivity.adapter;
 
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
@@ -9,6 +10,7 @@ import android.view.ViewGroup;
 import com.lovely.walknavigationapp.data.model.directionResult.Location;
 import com.lovely.walknavigationapp.databinding.ItemAdditionalAddressBinding;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class AdditionalAddressesAdapter extends RecyclerView.Adapter<AdditionalAddressesAdapter.AddressViewHolder> {
@@ -35,6 +37,8 @@ public class AdditionalAddressesAdapter extends RecyclerView.Adapter<AdditionalA
 
     @Override
     public int getItemCount() {
+
+        Log.e("itemCount", "" + additionalAddresses.size());
         return additionalAddresses != null ? additionalAddresses.size() : 0;
     }
 
@@ -43,7 +47,9 @@ public class AdditionalAddressesAdapter extends RecyclerView.Adapter<AdditionalA
      */
     public void addTheAddresses(List<Location> additionalAddresses) {
 
-        this.additionalAddresses = additionalAddresses;
+        additionalAddresses = new ArrayList<>();
+        this.additionalAddresses.addAll(additionalAddresses);
+
         notifyDataSetChanged();
     }
 

@@ -51,6 +51,6 @@ class SplashActivity : AppCompatActivity() {
 
         val intentToGetLocation = Intent(this@SplashActivity, GetLocationActivity::class.java)
         startActivity(intentToGetLocation)
-
+        finish()
     }
 }
