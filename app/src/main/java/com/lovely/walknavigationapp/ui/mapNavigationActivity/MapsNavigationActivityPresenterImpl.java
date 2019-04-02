@@ -64,18 +64,18 @@ public class MapsNavigationActivityPresenterImpl
     private int getPolyLineColor(final Distance startToEndDistance) {
 
         if (startToEndDistance.inMeters < FOUR_THOUSAND) {
-            return Color.BLACK;
+            return R.color.black;
 
         } else if (startToEndDistance.inMeters > FOUR_THOUSAND
                 && startToEndDistance.inMeters < TWENTY_THOUSAND) {
-            return Color.BLUE;
+            return R.color.blue;
 
         } else if (startToEndDistance.inMeters > TWENTY_THOUSAND) {
             return R.color.purple;
 
         }
 
-        return Color.BLACK;
+        return R.color.black;
     }
 
     @Override

@@ -48,7 +48,6 @@ public class MapsNavigationActivity
     private GoogleMap googleMap;
     private GetLocationModel getLocationModel;
 
-    private NavigationViewModel navigationViewModel;
     private Dialog dialog;
     private String mWayPointsString;
 
@@ -56,9 +55,6 @@ public class MapsNavigationActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps_navigation);
-
-        //viewmodel
-        navigationViewModel = ViewModelProviders.of(this).get(NavigationViewModel.class);
 
         // getIntentData
         getIntentData();
@@ -195,8 +191,6 @@ public class MapsNavigationActivity
         }
 
         mWayPointsString = wayPointsString;
-
-        navigationViewModel.saveWayPoints(wayPointsString);
     }
 
     /**

@@ -15,11 +15,13 @@ import android.widget.Toast;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.common.api.Status;
-import com.google.android.gms.location.places.Place;
-import com.google.android.gms.location.places.ui.PlaceAutocomplete;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.libraries.places.api.Places;
+import com.google.android.libraries.places.api.model.Place;
 import com.google.android.libraries.places.api.net.PlacesClient;
+import com.google.android.libraries.places.widget.Autocomplete;
+import com.google.android.libraries.places.widget.AutocompleteActivity;
+import com.google.android.libraries.places.widget.model.AutocompleteActivityMode;
 import com.lovely.walknavigationapp.R;
 import com.lovely.walknavigationapp.constant.Appconstant;
 import com.lovely.walknavigationapp.data.model.directionResult.Location;
@@ -29,6 +31,7 @@ import com.lovely.walknavigationapp.ui.mapNavigationActivity.MapsNavigationActiv
 import com.lovely.walknavigationapp.util.CommonUtil;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class GetLocationActivity
@@ -63,18 +66,8 @@ public class GetLocationActivity
         // instantiate presenter instance
         presenter = new GetLocationActivityPresenterImpl(this);
 
-        initialisePlacesSDK();
-
     }
 
-    private void initialisePlacesSDK() {
-
-        // Initialize Places.
-        Places.initialize(getApplicationContext(), getString(R.string.google_maps_api_key));
-
-        // Create a new Places client instance.
-        PlacesClient placesClient = Places.createClient(this);
-    }
 
     @Override
     protected void onStart() {
@@ -201,17 +194,29 @@ public class GetLocationActivity
             throws GooglePlayServicesRepairableException {
 
         if (CommonUtil.isNetworkAvailable(this)) {
-            try {
 
-                Intent intent =
+
+              /*  Intent intent =
                         new PlaceAutocomplete
                                 .IntentBuilder(PlaceAutocomplete.MODE_OVERLAY)
                                 .build(this);
 
-                startActivityForResult(intent, 1);
+                startActivityForResult(intent, 1);*/
 
-            } catch (GooglePlayServicesNotAvailableException ignored) {
+            if (!Places.isInitialized()) {
+                Places.initialize(getApplicationContext(), getString(R.string.google_maps_api_key));
             }
+
+            List<com.google.android.libraries.places.api.model.Place.Field> placeFields =
+                    new ArrayList<>(Arrays.asList(com.google.android.libraries.places.api.model.Place.Field.values()));
+
+            // Create a RectangularBounds object.
+            Intent autocompleteIntent =
+                    new Autocomplete.IntentBuilder(AutocompleteActivityMode.OVERLAY, placeFields)
+                            .build(this);
+            startActivityForResult(autocompleteIntent, 1);
+
+
         } else {
             Toast.makeText(GetLocationActivity.this, getString(R.string.no_internet_connection), Toast.LENGTH_LONG).show();
         }
@@ -238,16 +243,17 @@ public class GetLocationActivity
 
             // callback from PlaceAutoComplete
             if (resultCode == RESULT_OK) {
-                Place place = PlaceAutocomplete.getPlace(this, data);
+
+                Place place = Autocomplete.getPlaceFromIntent(data);
 
                 handleAutoCompleteResult(place.getLatLng().latitude,
                         place.getLatLng().longitude,
                         place.getAddress().toString());
 
 
-            } else if (resultCode == PlaceAutocomplete.RESULT_ERROR) {
-                Status status = PlaceAutocomplete.getStatus(this, data);
-                Log.e("Tag", status.getStatusMessage());
+            } else if (resultCode == AutocompleteActivity.RESULT_ERROR) {
+                Status status = Autocomplete.getStatusFromIntent(data);
+                Log.i("Tag", status.getStatusMessage());
 
             } else if (resultCode == RESULT_CANCELED) {
                 // The user canceled the operation.

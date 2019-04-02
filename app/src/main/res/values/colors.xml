@@ -14,10 +14,14 @@
     <color name="medium_gray">#CDCCCC</color>
 
     <!--black scale-->
+    <color name="black">#000000</color>
     <color name="black_50">#80000000</color>
 
     <!--purple-->
     <color name="purple">#800080</color>
+
+    <!--blue scale-->
+    <color name="blue">#003366</color>
 
 
     <!--red scale-->
